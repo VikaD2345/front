@@ -77,7 +77,7 @@ function App() {
   }
 
   return (
-    <Router basename="/book-store/">
+    <Router basename="/front/">
       <Header cartCount={cart.length} />
       <main className="main-content">
         <Routes>
