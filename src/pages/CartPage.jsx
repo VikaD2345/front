@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import '../styles/pages.css'
 
 export default function CartPage({ cart, onUpdateQuantity, onRemove }) {
@@ -9,9 +10,9 @@ export default function CartPage({ cart, onUpdateQuantity, onRemove }) {
         <div className="empty-cart">
           <h1>🛒 Корзина пуста</h1>
           <p>Добавьте книги в корзину, чтобы оформить заказ</p>
-          <a href="/books" className="hero-button">
+          <Link to="/books" className="hero-button">
             Перейти в каталог →
-          </a>
+          </Link>
         </div>
       </main>
     )

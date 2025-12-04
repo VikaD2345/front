@@ -1,98 +1,80 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Header from './components/Header.jsx'
-import HomePage from './pages/HomePage.jsx'
-import BooksPage from './pages/BooksPage.jsx'
-import BookDetailPage from './pages/BookDetailPage.jsx'
-import CartPage from './pages/CartPage.jsx'
-import ContactsPage from './pages/ContactsPage.jsx'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import HomePage from './pages/HomePage';
+import BooksPage from './pages/BooksPage';
+import BookDetailPage from './pages/BookDetailPage';
+import CartPage from './pages/CartPage';
+import ContactsPage from './pages/ContactsPage';
+import TechnologiesPage from './pages/TechnologiesPage';
+import './styles/pages.css';
 
 function App() {
-  const [cart, setCart] = useState(() => {
-    try {
-      const saved = window.localStorage.getItem('bookstoreCart')
-      return saved ? JSON.parse(saved) : []
-    } catch (e) {
-      return []
-    }
-  })
-
   const [favorites, setFavorites] = useState(() => {
-    try {
-      const saved = window.localStorage.getItem('bookstoreFavorites')
-      return saved ? JSON.parse(saved) : []
-    } catch (e) {
-      return []
-    }
-  })
+    const saved = localStorage.getItem('favorites');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [cart, setCart] = useState(() => {
+    const saved = localStorage.getItem('cart');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem('bookstoreCart', JSON.stringify(cart))
-    } catch (e) {
-      console.error('Ошибка сохранения корзины:', e)
-    }
-  }, [cart])
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem('bookstoreFavorites', JSON.stringify(favorites))
-    } catch (e) {
-      console.error('Ошибка сохранения избранного:', e)
-    }
-  }, [favorites])
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
-  const addToCart = (book) => {
+  const handleToggleFavorite = (bookId) => {
+    setFavorites(prev =>
+      prev.includes(bookId) ? prev.filter(id => id !== bookId) : [...prev, bookId]
+    );
+  };
+
+  const handleAddToCart = (book) => {
     setCart(prev => {
-      const existing = prev.find(item => item.id === book.id)
+      const existing = prev.find(item => item.id === book.id);
       if (existing) {
         return prev.map(item =>
           item.id === book.id ? { ...item, quantity: item.quantity + 1 } : item
-        )
+        );
       }
-      return [...prev, { ...book, quantity: 1 }]
-    })
-  }
+      return [...prev, { ...book, quantity: 1 }];
+    });
+  };
 
-  const removeFromCart = (bookId) => {
-    setCart(prev => prev.filter(item => item.id !== bookId))
-  }
+  const handleRemoveFromCart = (bookId) => {
+    setCart(prev => prev.filter(item => item.id !== bookId));
+  };
 
-  const updateCartQuantity = (bookId, quantity) => {
-    if (quantity <= 0) {
-      removeFromCart(bookId)
-    } else {
-      setCart(prev =>
-        prev.map(item =>
-          item.id === bookId ? { ...item, quantity } : item
-        )
-      )
-    }
-  }
-
-  const toggleFavorite = (bookId) => {
-    setFavorites(prev =>
-      prev.includes(bookId) ? prev.filter(id => id !== bookId) : [...prev, bookId]
-    )
-  }
+  const handleUpdateQuantity = (bookId, quantity) => {
+    setCart(prev =>
+      prev.map(item =>
+        item.id === bookId ? { ...item, quantity } : item
+      ).filter(item => item.quantity > 0)
+    );
+  };
 
   return (
-    <Router basename="/front/">
+    <Router>
       <Header cartCount={cart.length} />
-      <main className="main-content">
+      <main className="app-main">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route
             path="/books"
-            element={<BooksPage favorites={favorites} onToggleFavorite={toggleFavorite} />}
+            element={<BooksPage favorites={favorites} onToggleFavorite={handleToggleFavorite} />}
           />
           <Route
-            path="/book/:id"
+            path="/books/:id"
             element={
               <BookDetailPage
                 favorites={favorites}
-                onToggleFavorite={toggleFavorite}
-                onAddToCart={addToCart}
+                onToggleFavorite={handleToggleFavorite}
+                onAddToCart={handleAddToCart}
               />
             }
           />
@@ -101,16 +83,17 @@ function App() {
             element={
               <CartPage
                 cart={cart}
-                onUpdateQuantity={updateCartQuantity}
-                onRemove={removeFromCart}
+                onRemoveFromCart={handleRemoveFromCart}
+                onUpdateQuantity={handleUpdateQuantity}
               />
             }
           />
           <Route path="/contacts" element={<ContactsPage />} />
+          <Route path="/technologies" element={<TechnologiesPage />} />
         </Routes>
       </main>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

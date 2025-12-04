@@ -6,7 +6,7 @@ export default function Header({ cartCount }) {
     <header className="header">
       <div className="header-container">
         <div className="header-brand">
-          <Link to="/" className="brand-link">
+          <Link to="/books" className="brand-link">
             <h1>📚 Book Store</h1>
           </Link>
         </div>
@@ -30,6 +30,11 @@ export default function Header({ cartCount }) {
             <li>
               <Link to="/contacts" className="nav-link">
                 Контакты
+              </Link>
+            </li>
+            <li>
+              < Link to="/technologies">
+                Технологии
               </Link>
             </li>
           </ul>

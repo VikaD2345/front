@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import '../styles/pages.css'
 
 export default function HomePage() {
@@ -6,10 +7,10 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-content">
           <h1>Добро пожаловать в Book Store 📚</h1>
-          <p>Магазин классических книг всемирной литературы</p>
-          <a href="/books" className="hero-button">
+          <p>Магазин классических книг всемирной литературы + изучение языков програмирования. Совмещай приятоное с полезным</p>
+          <Link to="/books" className="hero-button">
             Перейти в каталог →
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -45,6 +46,11 @@ export default function HomePage() {
             <span className="feature-icon">🔒</span>
             <h3>Безопасность покупок</h3>
             <p>Защита ваших данных и прав покупателя</p>
+          </div>
+          <div className="feature-card">
+            <span className="feature-icon">⚙️</span>
+            <h3>Клиентоориентированны</h3>
+            <p>Изучай программирование с нами</p>
           </div>
         </div>
       </section>
